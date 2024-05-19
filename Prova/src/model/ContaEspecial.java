@@ -1,17 +1,15 @@
 package model;
 
-public class ContaEspecial extends ContaBancaria {
+public class ContaEspecial extends ContaBancaria implements Conta {
 
-	private double limite;
+	private double limite = 300.00;
 
-	public ContaEspecial() {
-		super();
-	}
-
-	public ContaEspecial(double limite) {
-		super();
+	
+	public ContaEspecial(String cliente, int numeroAgencia, int numeroConta, double saldo, double limite) {
+		super(cliente, numeroAgencia, numeroConta, saldo);
 		this.limite = limite;
 	}
+	
 
 	public double getLimite() {
 		return limite;
@@ -22,17 +20,24 @@ public class ContaEspecial extends ContaBancaria {
 	}
 	
 	@Override
-    public void sacar(double valor) {
+    public void sacar(double saque) {
+        System.out.println("Quanto você deseja sacar?");
+        saque = leiaDouble.nextDouble();
         double saldoComLimite = getSaldo() + limite;
-        if (saldoComLimite >= valor) {
-            setSaldo(getSaldo() - valor);
-            System.out.println("Saque de R$" + valor + " realizado com sucesso.");
+        if (saldoComLimite >= saque) {
+            setSaldo(getSaldo() - saque);
+            
+            transacoes.add("Saque: -" + saque + ", Saldo: " + getSaldo() + " (com limite)");
+            System.out.println("Saque de R$" + saque + " realizado com sucesso. Seu saldo atual com limite é R$" + getSaldo());
         } else {
             System.out.println("Saldo insuficiente.");
         }
     }
-	
-	@Override
+
+    @Override
     public void extrato() {
-        System.out.println("Exibindo extrato...");
+        System.out.println("Extrato da Conta Especial:");
+        super.extrato();
+        System.out.println("Limite disponível: " + limite);
+    }
 }
